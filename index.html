@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagement Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Cinematic Intro Screen */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .intro-initials {
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .bismillah {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .intro-names {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 30px;
+        }
+
+        .tap-btn {
+            background: linear-gradient(135deg, var(--gold), #aa771c);
+            color: #000;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .tap-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        section {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 35px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .ornament {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin: 15px 0;
+            letter-spacing: 5px;
+        }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .names-highlight {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--text-main);
+            margin: 15px 0;
+        }
+
+        .parents-info {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* Video Background / Holder Section */
+        .video-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            margin-top: 15px;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Countdown Timer */
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 12px 10px;
+            min-width: 65px;
+        }
+
+        .countdown-box span:first-child {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+        }
+
+        .countdown-box span:last-child {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Scratch Card Section */
+        .scratch-card-wrapper {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--gold);
+            margin-top: 15px;
+        }
+
+        .scratch-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .scratch-content h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        /* Action Buttons / Links */
+        .map-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .map-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* RSVP Form */
+        .rsvp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .rsvp-form input, .rsvp-form select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .rsvp-form input:focus, .rsvp-form select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .submit-btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            margin: 40px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cinematic Intro Overlay -->
+    <div id="intro-screen">
+        <div class="intro-initials">G&B</div>
+        <div class="bismillah">Bismillah-ir-Rahman-ir-Raheem</div>
+        <div class="intro-names">[Groom Name] &amp; [Bride Name]</div>
+        <button class="tap-btn" onclick="startInvitation()">Tap to Begin</button>
+    </div>
+
+    <!-- Background Audio Placeholder -->
+    <audio id="bg-audio" loop>
+        <source src="your-audio-file.mp3" type="audio/mpeg">
+    </audio>
+
+    <main>
+        <!-- Header Section -->
+        <section>
+            <div class="bismillah">Bismillah-ir-Rahman-ir-Raheem</div>
+            <div class="ornament">❖ ❖ ❖</div>
+            <p>The Engagement Ceremony Of</p>
+            
+            <h1 style="margin-top: 15px;">[Groom Name]</h1>
+            <p class="parents-info">Son of <b>[Father's Name] &amp; [Mother's Name]</b></p>
+            
+            <p style="font-size: 1.5rem; color: var(--gold); margin: 10px 0;">&amp;</p>
+            
+            <h1>[Bride Name]</h1>
+            <p class="parents-info">Daughter of <b>[Father's Name] &amp; [Mother's Name]</b></p>
+            
+            <div class="ornament">❖ ❖ ❖</div>
+            <p>Together With Their Families</p>
+
+            <!-- Video Holder Placeholder -->
+            <div class="video-container">
+                <!-- Replace src with your video link placeholder -->
+                <video controls poster="your-video-poster.jpg">
+                    <source src="[YOUR_VIDEO_URL_HERE]" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+
+        <!-- Welcome Quote -->
+        <section>
+            <div class="ornament">❖</div>
+            <p>With hearts full of joy and by the grace of the Almighty, we cordially invite you and your esteemed family to grace the auspicious occasion of our engagement ceremony and shower the couple with your love, blessings, and good wishes.</p>
+            <div class="ornament">❖</div>
+        </section>
+
+        <!-- Countdown Timer -->
+        <section>
+            <h2>Counting Down To Forever</h2>
+            <div class="countdown-grid" id="countdown">
+                <div class="countdown-box"><span id="days">00</span><span>Days</span></div>
+                <div class="countdown-box"><span id="hours">00</span><span>Hours</span></div>
+                <div class="countdown-box"><span id="mins">00</span><span>Minutes</span></div>
+                <div class="countdown-box"><span id="secs">00</span><span>Seconds</span></div>
+            </div>
+        </section>
+
+        <!-- Schedule Section -->
+        <section>
+            <h2>The Day's Schedule</h2>
+            <div class="ornament">❖</div>
+            <div style="margin-top: 15px;">
+                <p style="font-size: 1.1rem; color: var(--text-main); font-weight: 500;">09:00 PM Onwards</p>
+                <p>Ring Ceremony &amp; Gala Dinner</p>
+            </div>
+        </section>
+
+        <!-- Scratch Card Date Reveal -->
+        <section>
+            <p class="names-highlight">[Groom Name] <span style="color: var(--gold);">&amp;</span> [Bride Name]</p>
+            <p style="margin-bottom: 15px;">Scratch below to reveal</p>
+            <div class="scratch-card-wrapper">
+                <div class="scratch-content">
+                    <h3>Save the Date</h3>
+                    <p style="color: var(--text-main); font-weight: 500;">Monday, 19 October 2026</p>
+                    <p>9:00 PM Onwards</p>
+                </div>
+                <canvas id="scratchCanvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Venue Section -->
+        <section>
+            <h2>The Venue</h2>
+            <p style="font-size: 1.1rem; color: var(--text-main); margin-top: 10px;">[Function Hall Name, City]</p>
+            <div class="ornament">❖</div>
+            <a href="https://maps.google.com/?q=Your+Venue+Location" class="map-btn" target="_blank" rel="noopener noreferrer">See On Google Maps</a>
+        </section>
+
+        <!-- RSVP Section -->
+        <section>
+            <h2>Will You Join Us?</h2>
+            <div class="ornament">❖</div>
+            <form class="rsvp-form" onsubmit="handleRSVP(event)">
+                <input type="text" placeholder="Your Full Name" required>
+                <select required>
+                    <option value="" disabled selected>Will you attend?</option>
+                    <option value="yes">Joyfully Accepts</option>
+                    <option value="no">Regretfully Declines</option>
+                </select>
+                <button type="submit" class="submit-btn">Send RSVP</button>
+            </form>
+        </section>
+
+        <!-- Closing Note -->
+        <section>
+            <div class="ornament">❖</div>
+            <p>Your presence is the most precious gift we could ask for. We humbly request the honour of your company as we begin this beautiful journey together.</p>
+            <p style="margin-top: 15px;">Awaiting your gracious presence</p>
+            <p class="names-highlight" style="font-size: 1.5rem; margin-top: 10px;">[Groom Name] <span style="color: var(--gold);">&amp;</span> [Bride Name]</p>
+            <div class="ornament">❖</div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Crafted with love · <a href="#">Create Yours</a></p>
+    </footer>
+
+    <script>
+        // Start Invitation & Play Audio
+        function startInvitation() {
+            const intro = document.getElementById('intro-screen');
+            const audio = document.getElementById('bg-audio');
+            
+            intro.classList.add('hidden');
+            audio.play().catch(e => console.log("Audio autoplay restricted:", e));
+        }
+
+        // Countdown Timer Logic (Target Date: Oct 19, 2026)
+        const targetDate = new Date("October 19, 2026 21:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                document.getElementById('days').innerText = Math.floor(difference / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById('hours').innerText = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById('mins').innerText = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById('secs').innerText = Math.floor((difference % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Scratch Card Canvas Effect
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function initScratchCard() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#d4af37';
+            ctx.font = '16px Cinzel, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Scratch to Reveal Date', canvas.width / 2, canvas.height / 2 + 6);
+        }
+
+        window.addEventListener('load', initScratchCard);
+        window.addEventListener('resize', initScratchCard);
+
+        let isDrawing = false;
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mousemove', scratch);
+        window.addEventListener('mouseup', () => isDrawing = false);
+
+        canvas.addEventListener('touchstart', () => isDrawing = true);
+        canvas.addEventListener('touchmove', scratch);
+        window.addEventListener('touchend', () => isDrawing = false);
+
+        // RSVP Handler
+        function handleRSVP(e) {
+            e.preventDefault();
+            alert("Thank you! Your RSVP has been recorded.");
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
